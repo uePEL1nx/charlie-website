@@ -1,0 +1,2 @@
+# Mark the large WebGL game file as binary so git doesn't try to diff it
+"ULTRAKILL Offline Download.html" binary

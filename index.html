@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ULTRAKILL</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --red: #ff1a1a;
+    --dark-red: #8b0000;
+    --blood: #cc0000;
+    --bg: #0a0a0a;
+    --bg-light: #141414;
+    --text: #e0e0e0;
+    --text-dim: #888;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.08) 2px,
+      rgba(0, 0, 0, 0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 40%, rgba(139, 0, 0, 0.25) 0%, transparent 70%),
+      var(--bg);
+  }
+
+  /* Animated blood drip accents */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--red), var(--blood), var(--red), transparent);
+    box-shadow: 0 0 20px var(--red), 0 0 60px rgba(255, 26, 26, 0.3);
+  }
+
+  .title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(3rem, 10vw, 8rem);
+    font-weight: 900;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    text-shadow:
+      0 0 20px rgba(255, 26, 26, 0.8),
+      0 0 60px rgba(255, 26, 26, 0.4),
+      0 0 100px rgba(139, 0, 0, 0.3),
+      4px 4px 0 #000;
+    animation: pulse-glow 3s ease-in-out infinite;
+    position: relative;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { text-shadow: 0 0 20px rgba(255,26,26,0.8), 0 0 60px rgba(255,26,26,0.4), 0 0 100px rgba(139,0,0,0.3), 4px 4px 0 #000; }
+    50% { text-shadow: 0 0 30px rgba(255,26,26,1), 0 0 80px rgba(255,26,26,0.6), 0 0 120px rgba(139,0,0,0.5), 4px 4px 0 #000; }
+  }
+
+  .subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: var(--text-dim);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+  }
+
+  .tagline {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--blood);
+    margin-top: 1.5rem;
+    font-style: italic;
+    max-width: 600px;
+  }
+
+  /* ── Play Button ── */
+  .play-btn {
+    display: inline-block;
+    margin-top: 3rem;
+    padding: 1.2rem 4rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    background: linear-gradient(180deg, var(--red) 0%, var(--dark-red) 100%);
+    border: 2px solid var(--red);
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  }
+
+  .play-btn:hover {
+    background: linear-gradient(180deg, #ff3333 0%, var(--red) 100%);
+    box-shadow: 0 0 30px rgba(255, 26, 26, 0.6), 0 0 80px rgba(255, 26, 26, 0.2);
+    transform: scale(1.05);
+  }
+
+  .play-btn:active {
+    transform: scale(0.98);
+  }
+
+  /* ── Sections ── */
+  section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 700;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--dark-red);
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--dark-red), transparent);
+    margin: 0;
+  }
+
+  /* ── Game Info ── */
+  .info p {
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .feature-card {
+    background: var(--bg-light);
+    border: 1px solid #222;
+    border-left: 3px solid var(--blood);
+    padding: 1.5rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .feature-card:hover {
+    border-left-color: var(--red);
+    background: #1a1a1a;
+  }
+
+  .feature-card h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    color: var(--red);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .feature-card p {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    margin: 0;
+  }
+
+  /* ── Controls ── */
+  .controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .control-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 1rem;
+    background: var(--bg-light);
+    border: 1px solid #1a1a1a;
+  }
+
+  .control-row:hover {
+    border-color: #333;
+  }
+
+  .control-action {
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+
+  .control-key {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    color: var(--red);
+    background: #1a1a1a;
+    border: 1px solid #333;
+    padding: 0.25rem 0.6rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    border-top: 1px solid #1a1a1a;
+  }
+
+  footer a {
+    color: var(--blood);
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    color: var(--red);
+  }
+
+  /* ── Warning Banner ── */
+  .warning {
+    text-align: center;
+    padding: 0.6rem 1rem;
+    background: rgba(139, 0, 0, 0.15);
+    border: 1px solid var(--dark-red);
+    color: var(--blood);
+    font-size: 0.85rem;
+    max-width: 600px;
+    margin: 2rem auto 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <h1 class="title">ULTRAKILL</h1>
+  <p class="subtitle">Mankind is dead. Blood is fuel. Hell is full.</p>
+  <p class="tagline">"The only way out is through."</p>
+  <a class="play-btn" href="ULTRAKILL Offline Download.html" target="_blank">Play Now</a>
+  <div class="warning">WebGL build — best experienced in Chrome or Edge. May take a moment to load.</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Game Info -->
+<section class="info">
+  <h2 class="section-title">About the Game</h2>
+  <p>ULTRAKILL is a fast-paced ultraviolent retro first-person shooter. Combine powerful weaponry with fast movement to tear through hordes of the damned in a descent through the layers of Hell.</p>
+  <p>Blood is fuel — heal yourself by bathing in the blood of your enemies. The faster you move, the harder you hit, the more you heal. Keep the momentum or die.</p>
+
+  <div class="features">
+    <div class="feature-card">
+      <h3>Blood-Fueled</h3>
+      <p>Damage enemies up close to heal. Aggression is rewarded — standing still is death.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Arsenal</h3>
+      <p>Revolvers, shotguns, nailguns, and railcannons — each with alternate fire modes and techniques.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Movement</h3>
+      <p>Dash, slide, slam, and walljump. Chain movement abilities for maximum speed and style.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Style Scoring</h3>
+      <p>Earn style ranks from D to ULTRAKILL. Vary your attacks and keep the combo going.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Controls -->
+<section>
+  <h2 class="section-title">Controls</h2>
+  <div class="controls-grid">
+    <div class="control-row">
+      <span class="control-action">Move</span>
+      <span class="control-key">W A S D</span>
+    </div>
+    <div class="control-row">
+      <span class="control-action">Look</span>
+      <span class="control-key">Mouse</span>
+    </div>
+    <div class="control-row">
+      <span class="control-action">Shoot</span>
+      <span class="control-key">LMB</span>
+    </div>
+    <div class="control-row">
+      <span class="control-action">Alt Fire</span>
+      <span class="control-key">RMB</span>
+    </div>
+    <div class="control-row">
+      <span class="control-action">Jump</span>
+      <span class="control-key">Space</span>
+    </div>
+    <div class="control-row">
+      <span class="control-action">Dash</span>
+      <span class="control-key">Shift</span>
+    </div>
+    <div class="control-row">
+      <span class="control-action">Slide</span>
+      <span class="control-key">Ctrl</span>
+    </div>
+    <div class="control-row">
+      <span class="control-action">Slam</span>
+      <span class="control-key">Ctrl (air)</span>
+    </div>
+    <div class="control-row">
+      <span class="control-action">Punch</span>
+      <span class="control-key">F</span>
+    </div>
+    <div class="control-row">
+      <span class="control-action">Swap Weapon</span>
+      <span class="control-key">1-4 / Scroll</span>
+    </div>
+    <div class="control-row">
+      <span class="control-action">Weapon Variant</span>
+      <span class="control-key">E / Q</span>
+    </div>
+    <div class="control-row">
+      <span class="control-action">Pause</span>
+      <span class="control-key">Esc</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Footer -->
+<footer>
+  <p>ULTRAKILL by <a href="https://store.steampowered.com/app/1229490/ULTRAKILL/" target="_blank" rel="noopener">Arsi "Hakita" Patala / New Blood Interactive</a></p>
+  <p>WebGL port for educational/personal use only.</p>
+</footer>
+
+</body>
+</html>
