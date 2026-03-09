@@ -3,16 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ULTRAKILL</title>
+<title>ARCADE</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
 
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --red: #ff1a1a;
-    --dark-red: #8b0000;
-    --blood: #cc0000;
     --bg: #0a0a0a;
     --bg-light: #141414;
     --text: #e0e0e0;
@@ -25,6 +22,9 @@
     font-family: 'Share Tech Mono', monospace;
     overflow-x: hidden;
     line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
   /* Scanline overlay */
@@ -45,19 +45,18 @@
 
   /* ── Hero ── */
   .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    padding: 6rem 2rem 4rem;
     text-align: center;
     position: relative;
     background:
-      radial-gradient(ellipse at 50% 40%, rgba(139, 0, 0, 0.25) 0%, transparent 70%),
+      radial-gradient(ellipse at 30% 50%, rgba(255, 26, 26, 0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 43% 50%, rgba(74, 222, 128, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 57% 50%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 50%, rgba(56, 189, 248, 0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 83% 50%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
       var(--bg);
   }
 
-  /* Animated blood drip accents */
   .hero::before {
     content: '';
     position: absolute;
@@ -65,178 +64,182 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, transparent, var(--red), var(--blood), var(--red), transparent);
-    box-shadow: 0 0 20px var(--red), 0 0 60px rgba(255, 26, 26, 0.3);
+    background: linear-gradient(90deg, transparent, #ff1a1a, #4ade80, #f59e0b, #38bdf8, #a855f7, transparent);
+    box-shadow: 0 0 20px rgba(255, 26, 26, 0.4), 0 0 20px rgba(74, 222, 128, 0.4), 0 0 20px rgba(245, 158, 11, 0.4), 0 0 20px rgba(56, 189, 248, 0.4), 0 0 20px rgba(168, 85, 247, 0.4);
   }
 
   .title {
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(3rem, 10vw, 8rem);
+    font-size: clamp(3rem, 10vw, 7rem);
     font-weight: 900;
-    color: var(--red);
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    text-shadow:
-      0 0 20px rgba(255, 26, 26, 0.8),
-      0 0 60px rgba(255, 26, 26, 0.4),
-      0 0 100px rgba(139, 0, 0, 0.3),
-      4px 4px 0 #000;
-    animation: pulse-glow 3s ease-in-out infinite;
-    position: relative;
-  }
-
-  @keyframes pulse-glow {
-    0%, 100% { text-shadow: 0 0 20px rgba(255,26,26,0.8), 0 0 60px rgba(255,26,26,0.4), 0 0 100px rgba(139,0,0,0.3), 4px 4px 0 #000; }
-    50% { text-shadow: 0 0 30px rgba(255,26,26,1), 0 0 80px rgba(255,26,26,0.6), 0 0 120px rgba(139,0,0,0.5), 4px 4px 0 #000; }
+    background: linear-gradient(90deg, #ff1a1a, #4ade80, #f59e0b, #38bdf8, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px rgba(255, 26, 26, 0.3)) drop-shadow(0 0 30px rgba(56, 189, 248, 0.3));
   }
 
   .subtitle {
     font-family: 'Share Tech Mono', monospace;
-    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
     color: var(--text-dim);
-    letter-spacing: 0.4em;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
   }
 
-  .tagline {
-    font-size: clamp(1rem, 2.5vw, 1.4rem);
-    color: var(--blood);
-    margin-top: 1.5rem;
-    font-style: italic;
-    max-width: 600px;
+  /* ── Game Cards ── */
+  .games {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 2rem 4rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    flex: 1;
   }
 
-  /* ── Play Button ── */
-  .play-btn {
-    display: inline-block;
-    margin-top: 3rem;
-    padding: 1.2rem 4rem;
+  .card {
+    background: var(--bg-light);
+    border: 1px solid #222;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+  }
+
+  /* ULTRAKILL */
+  .card--red::before { background: #ff1a1a; box-shadow: 0 0 15px rgba(255, 26, 26, 0.5); }
+  .card--red:hover { border-color: #ff1a1a; box-shadow: 0 0 30px rgba(255, 26, 26, 0.15); }
+  .card--red .card__title { color: #ff1a1a; }
+  .card--red .card__btn {
+    background: linear-gradient(180deg, #ff1a1a 0%, #8b0000 100%);
+    border-color: #ff1a1a;
+  }
+  .card--red .card__btn:hover {
+    background: linear-gradient(180deg, #ff3333 0%, #ff1a1a 100%);
+    box-shadow: 0 0 25px rgba(255, 26, 26, 0.5);
+  }
+
+  /* EaglerCraft */
+  .card--green::before { background: #4ade80; box-shadow: 0 0 15px rgba(74, 222, 128, 0.5); }
+  .card--green:hover { border-color: #4ade80; box-shadow: 0 0 30px rgba(74, 222, 128, 0.15); }
+  .card--green .card__title { color: #4ade80; }
+  .card--green .card__btn {
+    background: linear-gradient(180deg, #4ade80 0%, #166534 100%);
+    border-color: #4ade80;
+    color: #000;
+  }
+  .card--green .card__btn:hover {
+    background: linear-gradient(180deg, #6ee7a0 0%, #4ade80 100%);
+    box-shadow: 0 0 25px rgba(74, 222, 128, 0.5);
+  }
+
+  /* Slope */
+  .card--cyan::before { background: #38bdf8; box-shadow: 0 0 15px rgba(56, 189, 248, 0.5); }
+  .card--cyan:hover { border-color: #38bdf8; box-shadow: 0 0 30px rgba(56, 189, 248, 0.15); }
+  .card--cyan .card__title { color: #38bdf8; }
+  .card--cyan .card__btn {
+    background: linear-gradient(180deg, #38bdf8 0%, #0c4a6e 100%);
+    border-color: #38bdf8;
+  }
+  .card--cyan .card__btn:hover {
+    background: linear-gradient(180deg, #5ccdfb 0%, #38bdf8 100%);
+    box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+  }
+
+  /* PolyTrack */
+  .card--orange::before { background: #f59e0b; box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); }
+  .card--orange:hover { border-color: #f59e0b; box-shadow: 0 0 30px rgba(245, 158, 11, 0.15); }
+  .card--orange .card__title { color: #f59e0b; }
+  .card--orange .card__btn {
+    background: linear-gradient(180deg, #f59e0b 0%, #78350f 100%);
+    border-color: #f59e0b;
+    color: #000;
+  }
+  .card--orange .card__btn:hover {
+    background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
+    box-shadow: 0 0 25px rgba(245, 158, 11, 0.5);
+  }
+
+  /* Die in the Dungeon */
+  .card--purple::before { background: #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); }
+  .card--purple:hover { border-color: #a855f7; box-shadow: 0 0 30px rgba(168, 85, 247, 0.15); }
+  .card--purple .card__title { color: #a855f7; }
+  .card--purple .card__btn {
+    background: linear-gradient(180deg, #a855f7 0%, #581c87 100%);
+    border-color: #a855f7;
+  }
+  .card--purple .card__btn:hover {
+    background: linear-gradient(180deg, #c084fc 0%, #a855f7 100%);
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
+  }
+
+  /* Deepest Sword */
+  .card--steel::before { background: #4a9eff; box-shadow: 0 0 15px rgba(74, 158, 255, 0.5); }
+  .card--steel:hover { border-color: #4a9eff; box-shadow: 0 0 30px rgba(74, 158, 255, 0.15); }
+  .card--steel .card__title { color: #4a9eff; }
+  .card--steel .card__btn {
+    background: linear-gradient(180deg, #4a9eff 0%, #1a3a6e 100%);
+    border-color: #4a9eff;
+  }
+  .card--steel .card__btn:hover {
+    background: linear-gradient(180deg, #6db3ff 0%, #4a9eff 100%);
+    box-shadow: 0 0 25px rgba(74, 158, 255, 0.5);
+  }
+
+  .card__title {
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .card__desc {
+    font-size: 1rem;
+    color: var(--text-dim);
+    margin-bottom: 2rem;
+    flex: 1;
+  }
+
+  .card__btn {
+    display: inline-block;
+    padding: 0.9rem 3rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
     font-weight: 700;
     color: #fff;
     text-decoration: none;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
-    background: linear-gradient(180deg, var(--red) 0%, var(--dark-red) 100%);
-    border: 2px solid var(--red);
-    position: relative;
+    letter-spacing: 0.15em;
+    border: 2px solid;
     cursor: pointer;
     transition: all 0.2s ease;
-    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
   }
 
-  .play-btn:hover {
-    background: linear-gradient(180deg, #ff3333 0%, var(--red) 100%);
-    box-shadow: 0 0 30px rgba(255, 26, 26, 0.6), 0 0 80px rgba(255, 26, 26, 0.2);
-    transform: scale(1.05);
-  }
-
-  .play-btn:active {
-    transform: scale(0.98);
-  }
-
-  /* ── Sections ── */
-  section {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-  }
-
-  .section-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.5rem, 4vw, 2.2rem);
-    font-weight: 700;
-    color: var(--red);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--dark-red);
-  }
-
-  .divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--dark-red), transparent);
-    margin: 0;
-  }
-
-  /* ── Game Info ── */
-  .info p {
-    font-size: 1.05rem;
-    margin-bottom: 1rem;
-    color: var(--text);
-  }
-
-  .features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
-  }
-
-  .feature-card {
-    background: var(--bg-light);
-    border: 1px solid #222;
-    border-left: 3px solid var(--blood);
-    padding: 1.5rem;
-    transition: border-color 0.2s, background 0.2s;
-  }
-
-  .feature-card:hover {
-    border-left-color: var(--red);
-    background: #1a1a1a;
-  }
-
-  .feature-card h3 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1rem;
-    color: var(--red);
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-  }
-
-  .feature-card p {
-    font-size: 0.9rem;
-    color: var(--text-dim);
-    margin: 0;
-  }
-
-  /* ── Controls ── */
-  .controls-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 0.75rem;
-  }
-
-  .control-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.7rem 1rem;
-    background: var(--bg-light);
-    border: 1px solid #1a1a1a;
-  }
-
-  .control-row:hover {
-    border-color: #333;
-  }
-
-  .control-action {
-    color: var(--text);
-    font-size: 0.95rem;
-  }
-
-  .control-key {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.8rem;
-    color: var(--red);
-    background: #1a1a1a;
-    border: 1px solid #333;
-    padding: 0.25rem 0.6rem;
-    letter-spacing: 0.05em;
+  .card__btn:active {
+    transform: scale(0.96);
   }
 
   /* ── Footer ── */
@@ -248,25 +251,16 @@
     border-top: 1px solid #1a1a1a;
   }
 
-  footer a {
-    color: var(--blood);
-    text-decoration: none;
-  }
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .games {
+      grid-template-columns: 1fr;
+      max-width: 450px;
+    }
 
-  footer a:hover {
-    color: var(--red);
-  }
-
-  /* ── Warning Banner ── */
-  .warning {
-    text-align: center;
-    padding: 0.6rem 1rem;
-    background: rgba(139, 0, 0, 0.15);
-    border: 1px solid var(--dark-red);
-    color: var(--blood);
-    font-size: 0.85rem;
-    max-width: 600px;
-    margin: 2rem auto 0;
+    .hero {
+      padding: 4rem 1.5rem 3rem;
+    }
   }
 </style>
 </head>
@@ -274,104 +268,52 @@
 
 <!-- Hero -->
 <div class="hero">
-  <h1 class="title">ULTRAKILL</h1>
-  <p class="subtitle">Mankind is dead. Blood is fuel. Hell is full.</p>
-  <p class="tagline">"The only way out is through."</p>
-  <a class="play-btn" href="ULTRAKILL Offline Download.html" target="_blank">Play Now</a>
-  <div class="warning">WebGL build — best experienced in Chrome or Edge. May take a moment to load.</div>
+  <h1 class="title">ARCADE</h1>
+  <p class="subtitle">Select your game</p>
 </div>
 
-<div class="divider"></div>
-
-<!-- Game Info -->
-<section class="info">
-  <h2 class="section-title">About the Game</h2>
-  <p>ULTRAKILL is a fast-paced ultraviolent retro first-person shooter. Combine powerful weaponry with fast movement to tear through hordes of the damned in a descent through the layers of Hell.</p>
-  <p>Blood is fuel — heal yourself by bathing in the blood of your enemies. The faster you move, the harder you hit, the more you heal. Keep the momentum or die.</p>
-
-  <div class="features">
-    <div class="feature-card">
-      <h3>Blood-Fueled</h3>
-      <p>Damage enemies up close to heal. Aggression is rewarded — standing still is death.</p>
-    </div>
-    <div class="feature-card">
-      <h3>Arsenal</h3>
-      <p>Revolvers, shotguns, nailguns, and railcannons — each with alternate fire modes and techniques.</p>
-    </div>
-    <div class="feature-card">
-      <h3>Movement</h3>
-      <p>Dash, slide, slam, and walljump. Chain movement abilities for maximum speed and style.</p>
-    </div>
-    <div class="feature-card">
-      <h3>Style Scoring</h3>
-      <p>Earn style ranks from D to ULTRAKILL. Vary your attacks and keep the combo going.</p>
-    </div>
+<!-- Game Cards -->
+<div class="games">
+  <div class="card card--red">
+    <h2 class="card__title">ULTRAKILL</h2>
+    <p class="card__desc">Fast-paced ultraviolent retro FPS. Blood is fuel.</p>
+    <a class="card__btn" href="ULTRAKILL Offline Download.html">Play</a>
   </div>
-</section>
 
-<div class="divider"></div>
-
-<!-- Controls -->
-<section>
-  <h2 class="section-title">Controls</h2>
-  <div class="controls-grid">
-    <div class="control-row">
-      <span class="control-action">Move</span>
-      <span class="control-key">W A S D</span>
-    </div>
-    <div class="control-row">
-      <span class="control-action">Look</span>
-      <span class="control-key">Mouse</span>
-    </div>
-    <div class="control-row">
-      <span class="control-action">Shoot</span>
-      <span class="control-key">LMB</span>
-    </div>
-    <div class="control-row">
-      <span class="control-action">Alt Fire</span>
-      <span class="control-key">RMB</span>
-    </div>
-    <div class="control-row">
-      <span class="control-action">Jump</span>
-      <span class="control-key">Space</span>
-    </div>
-    <div class="control-row">
-      <span class="control-action">Dash</span>
-      <span class="control-key">Shift</span>
-    </div>
-    <div class="control-row">
-      <span class="control-action">Slide</span>
-      <span class="control-key">Ctrl</span>
-    </div>
-    <div class="control-row">
-      <span class="control-action">Slam</span>
-      <span class="control-key">Ctrl (air)</span>
-    </div>
-    <div class="control-row">
-      <span class="control-action">Punch</span>
-      <span class="control-key">F</span>
-    </div>
-    <div class="control-row">
-      <span class="control-action">Swap Weapon</span>
-      <span class="control-key">1-4 / Scroll</span>
-    </div>
-    <div class="control-row">
-      <span class="control-action">Weapon Variant</span>
-      <span class="control-key">E / Q</span>
-    </div>
-    <div class="control-row">
-      <span class="control-action">Pause</span>
-      <span class="control-key">Esc</span>
-    </div>
+  <div class="card card--green">
+    <h2 class="card__title">EaglerCraft</h2>
+    <p class="card__desc">Minecraft in your browser. Build, explore, survive.</p>
+    <a class="card__btn" href="EaglerCraft.html">Play</a>
   </div>
-</section>
 
-<div class="divider"></div>
+  <div class="card card--cyan">
+    <h2 class="card__title">Slope</h2>
+    <p class="card__desc">Endless downhill runner. How far can you go?</p>
+    <a class="card__btn" href="Slope.html">Play</a>
+  </div>
+
+  <div class="card card--orange">
+    <h2 class="card__title">PolyTrack</h2>
+    <p class="card__desc">Low-poly racing. Build tracks, set records.</p>
+    <a class="card__btn" href="PolyTrack.html">Play</a>
+  </div>
+
+  <div class="card card--purple">
+    <h2 class="card__title">Die in the Dungeon</h2>
+    <p class="card__desc">Dice-based dungeon roguelite. Roll to survive.</p>
+    <a class="card__btn" href="DieInTheDungeon.html">Play</a>
+  </div>
+
+  <div class="card card--steel">
+    <h2 class="card__title">Deepest Sword</h2>
+    <p class="card__desc">Slay the dragon with an ever-growing sword.</p>
+    <a class="card__btn" href="DeepestSword.html">Play</a>
+  </div>
+</div>
 
 <!-- Footer -->
 <footer>
-  <p>ULTRAKILL by <a href="https://store.steampowered.com/app/1229490/ULTRAKILL/" target="_blank" rel="noopener">Arsi "Hakita" Patala / New Blood Interactive</a></p>
-  <p>WebGL port for educational/personal use only.</p>
+  <p>Games load in new tabs. Best experienced in Chrome or Edge.</p>
 </footer>
 
 </body>
