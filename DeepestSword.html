@@ -38,14 +38,15 @@
     color: #fff;
     text-align: center;
     gap: 24px;
+    padding: 24px;
   }
   .container h1 { font-size: 2.5rem; color: #4a9eff; }
   .container p { font-size: 1.1rem; color: #888; max-width: 500px; line-height: 1.6; }
-  .play-link {
+  .container code { background: #1a1a2e; padding: 2px 8px; border-radius: 4px; color: #4a9eff; font-size: 0.95em; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .play-link, .download-link {
     display: inline-block;
     padding: 16px 40px;
-    background: #4a9eff;
-    color: #fff;
     text-decoration: none;
     font-size: 1.2rem;
     font-weight: 700;
@@ -54,18 +55,64 @@
     clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
     transition: background 0.2s, box-shadow 0.2s;
   }
+  .play-link {
+    background: #4a9eff;
+    color: #fff;
+  }
   .play-link:hover {
     background: #6bb3ff;
     box-shadow: 0 0 25px rgba(74, 158, 255, 0.5);
   }
+  .download-link {
+    background: transparent;
+    color: #4a9eff;
+    border: 2px solid #4a9eff;
+  }
+  .download-link:hover {
+    background: rgba(74, 158, 255, 0.15);
+    box-shadow: 0 0 25px rgba(74, 158, 255, 0.4);
+  }
+  .webgl-warning {
+    display: none;
+    background: rgba(74, 158, 255, 0.1);
+    border: 1px solid rgba(74, 158, 255, 0.3);
+    border-radius: 8px;
+    padding: 16px 24px;
+    max-width: 550px;
+    color: #aaa;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .webgl-warning.visible { display: block; }
+  .webgl-warning strong { color: #4a9eff; }
 </style>
 </head>
 <body>
 <a class="back-btn" href="index.html">&larr; Back</a>
 <div class="container">
   <h1>Deepest Sword</h1>
-  <p>This game cannot be embedded directly. Click below to play it on itch.io.</p>
-  <a class="play-link" href="https://cosmicadventuresquad.itch.io/deepest-sword" target="_blank" rel="noopener">Play on itch.io</a>
+  <div class="webgl-warning" id="webglWarning">
+    <strong>Heads up:</strong> WebGL is not available in your browser. The itch.io version won't work either. You can download the offline version instead, or enable hardware acceleration at <code>chrome://settings/system</code> and restart Chrome.
+  </div>
+  <p>This game cannot be embedded directly. If itch.io is blocked on your network, use the download button instead.</p>
+  <div class="actions">
+    <a class="play-link" href="DeepestSword-v-0-1-5c-PC.zip" download>Download Offline Version</a>
+    <a class="download-link" href="https://cosmicadventuresquad.itch.io/deepest-sword" target="_blank" rel="noopener">Play on itch.io</a>
+  </div>
 </div>
+
+<script>
+(function() {
+  function hasWebGL() {
+    try {
+      var c = document.createElement('canvas');
+      return !!(c.getContext('webgl') || c.getContext('webgl2') || c.getContext('experimental-webgl'));
+    } catch (e) { return false; }
+  }
+  if (!hasWebGL()) {
+    document.getElementById('webglWarning').classList.add('visible');
+  }
+})();
+</script>
 </body>
 </html>
