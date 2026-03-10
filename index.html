@@ -233,6 +233,19 @@
     box-shadow: 0 0 25px rgba(20, 184, 166, 0.5);
   }
 
+  /* Retro Bowl */
+  .card--brown::before { background: #b45309; box-shadow: 0 0 15px rgba(180, 83, 9, 0.5); }
+  .card--brown:hover { border-color: #b45309; box-shadow: 0 0 30px rgba(180, 83, 9, 0.15); }
+  .card--brown .card__title { color: #b45309; }
+  .card--brown .card__btn {
+    background: linear-gradient(180deg, #b45309 0%, #5c2a04 100%);
+    border-color: #b45309;
+  }
+  .card--brown .card__btn:hover {
+    background: linear-gradient(180deg, #d97706 0%, #b45309 100%);
+    box-shadow: 0 0 25px rgba(180, 83, 9, 0.5);
+  }
+
   .card__title {
     font-family: 'Orbitron', sans-serif;
     font-size: clamp(1.3rem, 3vw, 1.8rem);
@@ -353,6 +366,12 @@
     <h2 class="card__title">Drift Hunters</h2>
     <p class="card__desc">Tune your car and drift for points.</p>
     <a class="card__btn" href="Drift Hunters.html">Play</a>
+  </div>
+
+  <div class="card card--brown">
+    <h2 class="card__title">Retro Bowl</h2>
+    <p class="card__desc">Pixel football. Lead your team to the championship.</p>
+    <a class="card__btn" href="Retro Bowl.html">Play</a>
   </div>
 </div>
 
