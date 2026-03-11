@@ -246,6 +246,19 @@
     box-shadow: 0 0 25px rgba(180, 83, 9, 0.5);
   }
 
+  /* Nintendo Emulator */
+  .card--crimson::before { background: #c41e3a; box-shadow: 0 0 15px rgba(196, 30, 58, 0.5); }
+  .card--crimson:hover { border-color: #c41e3a; box-shadow: 0 0 30px rgba(196, 30, 58, 0.15); }
+  .card--crimson .card__title { color: #c41e3a; }
+  .card--crimson .card__btn {
+    background: linear-gradient(180deg, #c41e3a 0%, #6b0f1f 100%);
+    border-color: #c41e3a;
+  }
+  .card--crimson .card__btn:hover {
+    background: linear-gradient(180deg, #e0234a 0%, #c41e3a 100%);
+    box-shadow: 0 0 25px rgba(196, 30, 58, 0.5);
+  }
+
   /* THPS3 */
   .card--gold::before { background: #eab308; box-shadow: 0 0 15px rgba(234, 179, 8, 0.5); }
   .card--gold:hover { border-color: #eab308; box-shadow: 0 0 30px rgba(234, 179, 8, 0.15); }
@@ -392,6 +405,12 @@
     <h2 class="card__title">THPS3</h2>
     <p class="card__desc">Tony Hawk's Pro Skater 3. Skate, grind, combo.</p>
     <a class="card__btn" href="THPS3.html">Play</a>
+  </div>
+
+  <div class="card card--crimson">
+    <h2 class="card__title">Nintendo Emulator</h2>
+    <p class="card__desc">150+ GBA classics. Pokemon, Mario, Zelda & more.</p>
+    <a class="card__btn" href="NintendoEmulator.html">Play</a>
   </div>
 </div>
 

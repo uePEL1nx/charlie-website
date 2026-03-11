@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nintendo Emulator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0a;
+    --bg-light: #141414;
+    --text: #e0e0e0;
+    --text-dim: #888;
+    --accent: #c41e3a;
+    --accent-dark: #6b0f1f;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.08) 2px,
+      rgba(0, 0, 0, 0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── Header ── */
+  .header {
+    padding: 2rem 2rem 1rem;
+    text-align: center;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(196, 30, 58, 0.12) 0%, transparent 60%),
+      var(--bg);
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    box-shadow: 0 0 20px rgba(196, 30, 58, 0.5);
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 1.5rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: 1px solid var(--accent);
+    transition: all 0.2s;
+    clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  }
+
+  .back-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(196, 30, 58, 0.4);
+  }
+
+  .title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.8rem, 6vw, 3.5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    text-shadow: 0 0 30px rgba(196, 30, 58, 0.4);
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: var(--text-dim);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+  }
+
+  /* ── Game Grid ── */
+  .grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .game-card {
+    background: var(--bg-light);
+    border: 1px solid #222;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .game-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent);
+    box-shadow: 0 0 10px rgba(196, 30, 58, 0.4);
+  }
+
+  .game-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(196, 30, 58, 0.12);
+  }
+
+  .game-card__name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .game-card__play {
+    display: inline-block;
+    padding: 0.5rem 2rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: 2px solid var(--accent);
+    background: linear-gradient(180deg, var(--accent) 0%, var(--accent-dark) 100%);
+    cursor: pointer;
+    transition: all 0.2s;
+    clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
+  }
+
+  .game-card__play:hover {
+    background: linear-gradient(180deg, #e0234a 0%, var(--accent) 100%);
+    box-shadow: 0 0 20px rgba(196, 30, 58, 0.5);
+  }
+
+  /* ── Player View ── */
+  .player {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: #000;
+    flex-direction: column;
+  }
+
+  .player.active {
+    display: flex;
+  }
+
+  .player__bar {
+    padding: 0.5rem 1rem;
+    background: var(--bg);
+    border-bottom: 1px solid #222;
+    flex-shrink: 0;
+  }
+
+  .player__back {
+    padding: 0.4rem 1.2rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: 1px solid var(--accent);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .player__back:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .player__frame {
+    flex: 1;
+    border: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 550px) {
+    .grid { grid-template-columns: 1fr; max-width: 400px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Grid View -->
+<div id="gridView">
+  <div class="header">
+    <a class="back-btn" href="index.html">&larr; Back to Arcade</a>
+    <h1 class="title">Nintendo Emulator</h1>
+    <p class="subtitle" id="gameCount"></p>
+  </div>
+  <div class="grid" id="gameGrid"></div>
+</div>
+
+<!-- Player View -->
+<div class="player" id="playerView">
+  <div class="player__bar">
+    <button class="player__back" id="backBtn">&larr; Back to Games</button>
+  </div>
+  <iframe class="player__frame" id="gameFrame" allowfullscreen></iframe>
+</div>
+
+<script>
+const GAMES = [
+  { name: 'Pokemon Emerald',            id: 'pokemonemerald' },
+  { name: 'Pokemon Fire Red',           id: 'pokemonfirered' },
+  { name: 'Pokemon Ruby',               id: 'pokemonruby' },
+  { name: 'Pokemon Sapphire',           id: 'pokemonsapphire' },
+  { name: 'Pokemon Leaf Green',         id: 'pokemonleafgreen' },
+  { name: 'Super Mario Advance',        id: 'supermarioadvance' },
+  { name: 'Super Mario Advance 2',      id: 'supermarioadvance2' },
+  { name: 'Super Mario Advance 3',      id: 'supermarioadvance3' },
+  { name: 'Super Mario Advance 4',      id: 'supermarioadvance4' },
+  { name: 'Mario Kart',                 id: 'mariokart' },
+  { name: 'Zelda: Minish Cap',          id: 'zelda_minishcap' },
+  { name: 'Metroid Fusion',             id: 'metroid_fusion' },
+  { name: 'Metroid Zero Mission',       id: 'metroid_zeromission' },
+  { name: 'Kirby & The Amazing Mirror', id: 'kirby_amazingmirror' },
+  { name: 'Donkey Kong Country',        id: 'dkc' },
+  { name: 'Donkey Kong Country 2',      id: 'dkc2' },
+  { name: 'Sonic Advance',              id: 'sonic_advance' },
+  { name: 'Crash Bandicoot',            id: 'crash_bandicoot' },
+  { name: 'Final Fantasy VI',           id: 'ff6' },
+  { name: 'Golden Sun',                 id: 'goldensun' },
+];
+
+const BASE_URL = 'https://theooofficial.github.io/myRETROGAMES/launcher.html#';
+
+const gridView = document.getElementById('gridView');
+const playerView = document.getElementById('playerView');
+const gameFrame = document.getElementById('gameFrame');
+const gameGrid = document.getElementById('gameGrid');
+
+document.getElementById('gameCount').textContent = GAMES.length + ' GBA Games';
+
+function renderGrid() {
+  gameGrid.innerHTML = GAMES.map(game => `
+    <div class="game-card" onclick="playGame('${game.id}')">
+      <div class="game-card__name">${game.name}</div>
+      <button class="game-card__play">Play</button>
+    </div>
+  `).join('');
+}
+
+function playGame(id) {
+  gameFrame.src = BASE_URL + id;
+  gridView.style.display = 'none';
+  playerView.classList.add('active');
+}
+
+document.getElementById('backBtn').addEventListener('click', function() {
+  playerView.classList.remove('active');
+  gridView.style.display = '';
+  gameFrame.src = '';
+});
+
+renderGrid();
+</script>
+</body>
+</html>
