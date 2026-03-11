@@ -246,6 +246,20 @@
     box-shadow: 0 0 25px rgba(180, 83, 9, 0.5);
   }
 
+  /* THPS3 */
+  .card--gold::before { background: #eab308; box-shadow: 0 0 15px rgba(234, 179, 8, 0.5); }
+  .card--gold:hover { border-color: #eab308; box-shadow: 0 0 30px rgba(234, 179, 8, 0.15); }
+  .card--gold .card__title { color: #eab308; }
+  .card--gold .card__btn {
+    background: linear-gradient(180deg, #eab308 0%, #713f12 100%);
+    border-color: #eab308;
+    color: #000;
+  }
+  .card--gold .card__btn:hover {
+    background: linear-gradient(180deg, #facc15 0%, #eab308 100%);
+    box-shadow: 0 0 25px rgba(234, 179, 8, 0.5);
+  }
+
   .card__title {
     font-family: 'Orbitron', sans-serif;
     font-size: clamp(1.3rem, 3vw, 1.8rem);
@@ -372,6 +386,12 @@
     <h2 class="card__title">Retro Bowl</h2>
     <p class="card__desc">Pixel football. Lead your team to the championship.</p>
     <a class="card__btn" href="Retro Bowl.html">Play</a>
+  </div>
+
+  <div class="card card--gold">
+    <h2 class="card__title">THPS3</h2>
+    <p class="card__desc">Tony Hawk's Pro Skater 3. Skate, grind, combo.</p>
+    <a class="card__btn" href="THPS3.html">Play</a>
   </div>
 </div>
 
