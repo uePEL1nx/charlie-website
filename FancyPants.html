@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fancy Pants Adventure</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a0a; font-family: 'Orbitron', Arial, sans-serif; }
+  #game-container { width: 100%; height: 100%; }
+  .back-btn {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 1000;
+    padding: 8px 18px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #0ea5e9;
+    border: 2px solid #0ea5e9;
+    font-family: 'Orbitron', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .back-btn:hover {
+    background: rgba(14, 165, 233, 0.2);
+    box-shadow: 0 0 15px rgba(14, 165, 233, 0.4);
+  }
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">&larr; Back</a>
+<div id="game-container"></div>
+<script src="https://unpkg.com/@nickyazma/nickyruffle@latest/ruffle.js"></script>
+<script>
+  window.RufflePlayer = window.RufflePlayer || {};
+  window.addEventListener("DOMContentLoaded", function() {
+    const ruffle = window.RufflePlayer.newest();
+    const player = ruffle.createPlayer();
+    player.style.width = "100%";
+    player.style.height = "100%";
+    document.getElementById("game-container").appendChild(player);
+    player.load("https://raw.githubusercontent.com/ellieeet123/swf/main/swf/fancy-pants-adventure.swf");
+  });
+</script>
+</body>
+</html>
