@@ -292,9 +292,24 @@ function renderGrid() {
 }
 
 function playGame(id) {
-  gameFrame.src = BASE_URL + id;
-  gridView.style.display = 'none';
-  playerView.classList.add('active');
+  var url = BASE_URL + id;
+  var w = window.open('about:blank', '_blank');
+  if (w) {
+    var d = w.document;
+    d.title = 'Classes';
+    var link = d.createElement('link');
+    link.rel = 'icon';
+    link.href = 'https://ssl.gstatic.com/classroom/favicon.png';
+    d.head.appendChild(link);
+    var iframe = d.createElement('iframe');
+    iframe.src = url;
+    iframe.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;border:none;';
+    iframe.allowFullscreen = true;
+    d.body.style.margin = '0';
+    d.body.appendChild(iframe);
+  } else {
+    window.location.href = url;
+  }
 }
 
 document.getElementById('backBtn').addEventListener('click', function() {

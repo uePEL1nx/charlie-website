@@ -1,1 +1,44 @@
-<iframe data-lazyloaded="1" src="https://retrobowl.me/iframe/retro-bowl/latest.html" loading="lazy" title="Play Retro Bowl" id="game-element" class="game-iframe entered litespeed-loaded" data-litespeed-src="https://retrobowl.me/iframe/retro-bowl/latest.html" width="100%" height="480" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen" data-ll-status="loaded"></iframe>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retro Bowl</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a0a; font-family: 'Orbitron', Arial, sans-serif; display: flex; align-items: center; justify-content: center; }
+  .launch { padding: 1.2rem 3rem; font-family: 'Orbitron', Arial, sans-serif; font-size: 1.2rem; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.15em; border: 2px solid #b45309; background: linear-gradient(180deg, #b45309 0%, #5c2a04 100%); cursor: pointer; clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%); transition: all 0.2s; }
+  .launch:hover { background: linear-gradient(180deg, #d97706 0%, #b45309 100%); box-shadow: 0 0 25px rgba(180, 83, 9, 0.5); }
+  .back-btn { position: fixed; top: 12px; left: 12px; padding: 8px 18px; background: rgba(0,0,0,0.7); color: #b45309; border: 2px solid #b45309; font-family: 'Orbitron', Arial, sans-serif; font-size: 14px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em; clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%); transition: background 0.2s, box-shadow 0.2s; }
+  .back-btn:hover { background: rgba(180,83,9,0.2); box-shadow: 0 0 15px rgba(180,83,9,0.4); }
+  .hint { position: fixed; bottom: 2rem; color: #555; font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; text-align: center; }
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">&larr; Back</a>
+<button class="launch" onclick="launchGame()">Launch Retro Bowl</button>
+<p class="hint">Opens in a new tab to bypass school filters</p>
+<script>
+function launchGame() {
+  var url = 'https://retrobowl.me/iframe/retro-bowl/latest.html';
+  var w = window.open('about:blank', '_blank');
+  if (w) {
+    var d = w.document;
+    d.title = 'Classes';
+    var link = d.createElement('link');
+    link.rel = 'icon';
+    link.href = 'https://ssl.gstatic.com/classroom/favicon.png';
+    d.head.appendChild(link);
+    var iframe = d.createElement('iframe');
+    iframe.src = url;
+    iframe.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;border:none;';
+    iframe.allowFullscreen = true;
+    d.body.style.margin = '0';
+    d.body.appendChild(iframe);
+  } else {
+    window.location.href = url;
+  }
+}
+</script>
+</body>
+</html>
